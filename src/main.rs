@@ -23,7 +23,7 @@ impl BitFlippable for str {
 }
 
 fn flip(byte: u8, bit: u8) -> u8 {
-    assert!(bit <= 7);
+    assert!(bit <= 8);
     let mask = 1 << bit;
     let flipped = !byte & mask;
     let rest = byte & !mask;
@@ -65,5 +65,40 @@ impl<'a> Iterator for FlipIter<'a> {
         let mut bytes = self.text.as_bytes().to_owned();
         bytes[this_char] = new_byte;
         Some(String::from_utf8(bytes))
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn last_bit() {
+        let a_byte = b'a';
+        assert_eq!(a_byte, 0b01100001);
+        assert_eq!(flip(a_byte, 0), 0b01100000);
+        assert_eq!(flip(a_byte, 1), 0b01100011);
+        assert_eq!(flip(a_byte, 2), 0b01100101);
+        assert_eq!(flip(a_byte, 3), 0b01101001);
+        assert_eq!(flip(a_byte, 4), 0b01110001);
+        assert_eq!(flip(a_byte, 5), 0b01000001);
+        assert_eq!(flip(a_byte, 6), 0b00100001);
+        assert_eq!(flip(a_byte, 7), 0b11100001);
+    }
+
+    #[test]
+    fn works_with_iter() {
+        let flips = "a".iter_flips().collect::<Vec<_>>();
+        assert_eq!(flips.len(), 8);
+
+        assert_eq!(flips[0].as_ref().unwrap(), String::from_utf8([0b01100000].to_vec()).unwrap().as_str());
+        assert_eq!(flips[1].as_ref().unwrap(), String::from_utf8([0b01100011].to_vec()).unwrap().as_str());
+        assert_eq!(flips[2].as_ref().unwrap(), String::from_utf8([0b01100101].to_vec()).unwrap().as_str());
+        assert_eq!(flips[3].as_ref().unwrap(), String::from_utf8([0b01101001].to_vec()).unwrap().as_str());
+        assert_eq!(flips[4].as_ref().unwrap(), String::from_utf8([0b01110001].to_vec()).unwrap().as_str());
+        assert_eq!(flips[5].as_ref().unwrap(), String::from_utf8([0b01000001].to_vec()).unwrap().as_str());
+        assert_eq!(flips[6].as_ref().unwrap(), String::from_utf8([0b00100001].to_vec()).unwrap().as_str());
+        assert!(flips[7].as_ref().is_err(), "0b11100001 is not valid utf8");
     }
 }
