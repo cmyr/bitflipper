@@ -68,7 +68,6 @@ impl<'a> Iterator for FlipIter<'a> {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -92,13 +91,34 @@ mod tests {
         let flips = "a".iter_flips().collect::<Vec<_>>();
         assert_eq!(flips.len(), 8);
 
-        assert_eq!(flips[0].as_ref().unwrap(), String::from_utf8([0b01100000].to_vec()).unwrap().as_str());
-        assert_eq!(flips[1].as_ref().unwrap(), String::from_utf8([0b01100011].to_vec()).unwrap().as_str());
-        assert_eq!(flips[2].as_ref().unwrap(), String::from_utf8([0b01100101].to_vec()).unwrap().as_str());
-        assert_eq!(flips[3].as_ref().unwrap(), String::from_utf8([0b01101001].to_vec()).unwrap().as_str());
-        assert_eq!(flips[4].as_ref().unwrap(), String::from_utf8([0b01110001].to_vec()).unwrap().as_str());
-        assert_eq!(flips[5].as_ref().unwrap(), String::from_utf8([0b01000001].to_vec()).unwrap().as_str());
-        assert_eq!(flips[6].as_ref().unwrap(), String::from_utf8([0b00100001].to_vec()).unwrap().as_str());
+        assert_eq!(
+            flips[0].as_ref().unwrap(),
+            String::from_utf8([0b01100000].to_vec()).unwrap().as_str()
+        );
+        assert_eq!(
+            flips[1].as_ref().unwrap(),
+            String::from_utf8([0b01100011].to_vec()).unwrap().as_str()
+        );
+        assert_eq!(
+            flips[2].as_ref().unwrap(),
+            String::from_utf8([0b01100101].to_vec()).unwrap().as_str()
+        );
+        assert_eq!(
+            flips[3].as_ref().unwrap(),
+            String::from_utf8([0b01101001].to_vec()).unwrap().as_str()
+        );
+        assert_eq!(
+            flips[4].as_ref().unwrap(),
+            String::from_utf8([0b01110001].to_vec()).unwrap().as_str()
+        );
+        assert_eq!(
+            flips[5].as_ref().unwrap(),
+            String::from_utf8([0b01000001].to_vec()).unwrap().as_str()
+        );
+        assert_eq!(
+            flips[6].as_ref().unwrap(),
+            String::from_utf8([0b00100001].to_vec()).unwrap().as_str()
+        );
         assert!(flips[7].as_ref().is_err(), "0b11100001 is not valid utf8");
     }
 }
