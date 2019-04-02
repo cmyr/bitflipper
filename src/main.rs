@@ -34,7 +34,6 @@ struct FlipIter<'a> {
     text: &'a str,
     char_idx: usize,
     bit: u8,
-    buf: Vec<u8>,
 }
 
 impl<'a> FlipIter<'a> {
@@ -43,7 +42,6 @@ impl<'a> FlipIter<'a> {
             text,
             char_idx: 0,
             bit: 0,
-            buf: text.as_bytes().to_owned(),
         }
     }
 }
@@ -64,10 +62,8 @@ impl<'a> Iterator for FlipIter<'a> {
             self.char_idx += 1;
         }
 
-        self.buf.clear();
-        self.buf.extend_from_slice(self.text.as_bytes());
-        self.buf[this_char] = new_byte;
-
-        Some(String::from_utf8(self.buf.clone()))
+        let mut bytes = self.text.as_bytes().to_owned();
+        bytes[this_char] = new_byte;
+        Some(String::from_utf8(bytes))
     }
 }
